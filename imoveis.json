@@ -1,0 +1,12 @@
+{
+  "lista": [
+    {
+      "id_airbnb": "12345678",
+      "nome": "Apartamento Centro"
+    },
+    {
+      "id_airbnb": "87654321",
+      "nome": "Casa de Praia"
+    }
+  ]
+}
