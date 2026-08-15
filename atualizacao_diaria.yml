@@ -1,0 +1,29 @@
+name: Atualizar Ocupacao Airbnb Diariamente
+
+on:
+  schedule:
+    - cron: '0 8 * * *' # Roda todos os dias às 08:00 (UTC)
+  workflow_dispatch: # Permite rodar o botão manualmente no GitHub
+
+jobs:
+  atualizar-dados:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o código do repositório
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Executar o script de coleta
+        run: python atualizador.py
+
+      - name: Salvar os novos dados no GitHub
+        run: |
+          git config --global user.name "Robo de Atualizacao"
+          git config --global user.email "robo@seu-dominio.com"
+          git add dados_consolidados.json
+          git commit -m "Atualização diária de ocupação" || echo "Nenhuma mudança"
+          git push
