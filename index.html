@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor de Ocupação Airbnb</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f7f7f7; padding: 20px; }
+        .card { background: white; padding: 20px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
+        .taxa { font-size: 24px; font-weight: bold; color: #FF5A5F; }
+    </style>
+</head>
+<body>
+
+    <h1>Monitor de Ocupação (Próximas 12 Semanas)</h1>
+    <p>Última atualização: <strong id="data-atualizacao">Carregando...</strong></p>
+
+    <div class="grid" id="container-imoveis">
+        <!-- Os imóveis aparecerão aqui -->
+    </div>
+
+    <script>
+        // O Javascript busca o arquivo gerado pelo robô e monta a tela
+        fetch('dados_consolidados.json')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('data-atualizacao').innerText = data.ultima_atualizacao;
+                
+                const container = document.getElementById('container-imoveis');
+                
+                data.imoveis.forEach(imovel => {
+                    const div = document.createElement('div');
+                    div.className = 'card';
+                    div.innerHTML = `
+                        <h3>${imovel.nome}</h3>
+                        <p>Dias Reservados: <strong>${imovel.dias_reservados} de 84</strong></p>
+                        <p class="taxa">Ocupação: ${imovel.taxa_ocupacao}%</p>
+                        <a href="https://www.airbnb.com/rooms/${imovel.id}" target="_blank">Ver no Airbnb</a>
+                    `;
+                    container.appendChild(div);
+                });
+            })
+            .catch(error => console.error('Erro ao carregar dados:', error));
+    </script>
+</body>
+</html>
